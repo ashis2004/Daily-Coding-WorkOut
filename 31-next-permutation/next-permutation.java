@@ -53,48 +53,36 @@
 
 class Solution{
     public static void nextPermutation(int[] nums) {
-        int n = nums.length;
-        int pivot = -1;
-        
-        // Step 1: Find the pivot (rightmost index where nums[i] < nums[i+1])
-        for (int i = n - 2; i >= 0; i--) {
-            if (nums[i] < nums[i + 1]) {
-                pivot = i;
+        int n=nums.length;
+        int piv=-1;
+
+        for(int i=n-2;i>=0;i--){
+            if(nums[i]<nums[i+1]){
+                piv=i;
                 break;
             }
         }
 
-        // Step 2: If a pivot exists, find the rightmost element larger than pivot
-        if (pivot != -1) {
-            for (int j = n - 1; j > pivot; j--) {
-                if (nums[j] > nums[pivot]) {
-                    swap(nums, pivot, j);
+        if(piv!=-1){
+            for(int i=n-1;i>piv;i--){
+                if(nums[i]>nums[piv]){
+                    int temp=nums[piv];
+                    nums[piv]=nums[i];
+                    nums[i]=temp;
                     break;
                 }
             }
         }
-        
-        // Step 3: Reverse the part from pivot+1 to end
-        reverse(nums, pivot + 1, n - 1);
+        reverse(nums,piv+1,n-1);
     }
-
-    private static void swap(int[] nums, int i, int j) {
-        int temp = nums[i];
-        nums[i] = nums[j];
-        nums[j] = temp;
-    }
-
-    private static void reverse(int[] nums, int start, int end) {
-        while (start < end) {
-            swap(nums, start, end);
+    private static void reverse(int nums[],int start,int end){
+        while(start<end){
+            int temp=nums[start];
+            nums[start]=nums[end];
+            nums[end]=temp;
             start++;
             end--;
+            
         }
-    }
-
-    public static void main(String[] args) {
-        int[] nums = {1, 2, 3};
-        nextPermutation(nums);
-        System.out.println(Arrays.toString(nums)); // Output: [1, 3, 2]
     }
 }
