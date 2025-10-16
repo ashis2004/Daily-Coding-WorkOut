@@ -3,7 +3,6 @@ import java.util.*;
 
 class Solution {
   public int maxArea(int[] height) {
-
     int right =height.length-1,left=0, maxArea=0;
 
     while(left<=right){
@@ -22,5 +21,8 @@ class Solution {
 
     }
     return maxArea;
+
+    
   }
 }
+
