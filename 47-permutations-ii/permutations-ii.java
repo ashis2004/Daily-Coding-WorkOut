@@ -1,29 +1,42 @@
+import java.util.*;
+
 class Solution {
-    
-    List<List<Integer>> solutions = new ArrayList<>();
-    
-    public List<List<Integer>> permuteUnique(int[] nums) {
-        HashMap<Integer, Integer> map = new HashMap<>();
-        for (int i: nums){
-            map.put(i, map.getOrDefault(i, 0) + 1);
-        }
-        permute(new LinkedList<>(), map);
-        return solutions;
-        
-    }
-    
-    public void permute(List<Integer> curr, HashMap<Integer, Integer> left){
-        if (left.size() == 0){
-            solutions.add(new ArrayList<>(curr));
+
+    public void prec(int[] nums, List<Integer> l, List<List<Integer>> ans, boolean[] used) {
+        if (l.size() == nums.length) {
+            ans.add(new ArrayList<>(l));
             return;
         }
-        Set<Integer> set = new HashSet<>(left.keySet());
-        for (int i: set){
-            curr.add(i);
-            if (!left.remove(i, 1)) left.replace(i, left.get(i) - 1);
-            permute(curr, left);
-            curr.remove(curr.size() - 1);
-            left.put(i, left.getOrDefault(i, 0) + 1);
+
+        for (int i = 0; i < nums.length; i++) {
+            if (used[i]) {
+                continue;
+            }
+
+            // Skip duplicate elements
+            if (i > 0 && nums[i] == nums[i - 1] && !used[i - 1]) {
+                continue;
+            }
+
+            used[i] = true;
+            l.add(nums[i]);
+            
+            prec(nums, l, ans, used);
+            
+            l.remove(l.size() - 1);
+            used[i] = false;
         }
+    }
+
+    public List<List<Integer>> permuteUnique(int[] nums) {
+        List<List<Integer>> ans = new ArrayList<>();
+        int n = nums.length;
+
+        // Must sort the array to group duplicates and apply the skipping logic
+        Arrays.sort(nums);
+
+        boolean[] used = new boolean[n];
+        prec(nums, new ArrayList<>(), ans, used);
+        return ans;
     }
 }
